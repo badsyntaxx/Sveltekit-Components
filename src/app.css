@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+	@apply box h-full bg-zinc-50 scroll-smooth font-roboto;
+}
+
+.disabled,
+[disabled],
+:disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.buttonStyle {
+	background-color: rgb(20 184 166) !important;
+	color: rgb(255 255 255) !important;
+	padding-left: 0.75rem /* 12px */ !important;
+	padding-right: 0.75rem /* 12px */ !important;
+	padding-top: 0.5rem /* 8px */ !important;
+	padding-bottom: 0.5rem /* 8px */ !important;
+	text-decoration: none !important;
+}
+
+.specialButton {
+	background-color: black;
+	color: white;
+	padding: 10px 20px;
+}
+
+.codewhite {
+	@apply text-white;
+}
+.codegray {
+	@apply text-gray-500;
+}
+.codeblue {
+	@apply text-sky-300;
+}
+.codedarkblue {
+	@apply text-sky-600;
+}
+.codeteal {
+	@apply text-teal-400;
+}
+.codeorange {
+	@apply text-orange-400;
+}
+.codepurple {
+	@apply text-purple-600;
+}
+.codeyellow {
+	@apply text-yellow-200;
+}
+.codedarkyellow {
+	@apply text-yellow-400;
+}
+
+pre {
+	@apply bg-neutral-800 rounded mt-2 px-9 text-xs leading-normal text-white;
+}

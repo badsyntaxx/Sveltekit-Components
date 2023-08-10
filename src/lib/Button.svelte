@@ -6,6 +6,8 @@
 	export let btnSuccess = false; // boolean - Will replace the button text with checkmark if true / relies on fontawesome
 	export let unstyled = false; // boolean - Override the default styles for the link
 	export let href = null;
+	export let size = 'base';
+	export let color = null;
 
 	let buttonProps = {};
 	let classes = $$restProps.class;
@@ -41,6 +43,13 @@
 			class:btn={!unstyled}
 			class:btn-loading={btnLoading}
 			class:btn-success={btnSuccess}
+			class:btn-xl={size == 'xl'}
+			class:btn-lg={size == 'lg'}
+			class:btn-base={size == 'base'}
+			class:btn-sm={size == 'sm'}
+			class:btn-xs={size == 'xs'}
+			class:btn-teal={color == 'teal'}
+			class:btn-black={color == 'black'}
 			class={classes}
 			{...buttonProps}
 			{target}
@@ -61,6 +70,13 @@
 			class:btn={!unstyled}
 			class:btn-loading={btnLoading}
 			class:btn-success={btnSuccess}
+			class:btn-xl={size == 'xl'}
+			class:btn-lg={size == 'lg'}
+			class:btn-base={size == 'base'}
+			class:btn-sm={size == 'sm'}
+			class:btn-xs={size == 'xs'}
+			class:btn-teal={color == 'teal'}
+			class:btn-black={color == 'black'}
 			class={classes}
 			{...buttonProps}
 		>
@@ -80,6 +96,13 @@
 		class:btn={!unstyled}
 		class:btn-loading={btnLoading}
 		class:btn-success={btnSuccess}
+		class:btn-xl={size == 'xl'}
+		class:btn-lg={size == 'lg'}
+		class:btn-base={size == 'base'}
+		class:btn-sm={size == 'sm'}
+		class:btn-xs={size == 'xs'}
+		class:btn-teal={color == 'teal'}
+		class:btn-black={color == 'black'}
 		class={classes}
 		{...buttonProps}
 	>
@@ -101,7 +124,7 @@
 		justify-content: center;
 		height: 2.5rem /* 40px */;
 		padding: 0 0.75rem /* 12px */;
-		border-radius: 0.5rem /* 8px */;
+		border-radius: 4px;
 		border-color: transparent;
 		white-space: nowrap;
 		transition-property: all;
@@ -115,16 +138,12 @@
 		color: #ffffff;
 	}
 
-	.btn:hover {
-		background-color: #0369a1;
-	}
-
 	.btn-xl {
 		height: 3.5rem !important;
 		padding-left: 2rem !important;
 		padding-right: 2rem !important;
 		font-size: 1.25rem !important;
-		line-height: 1.75rem;
+		line-height: 1.75rem !important;
 	}
 
 	.btn-lg {
@@ -132,7 +151,7 @@
 		padding-left: 1.5rem !important;
 		padding-right: 1.5rem !important;
 		font-size: 1rem !important;
-		line-height: 1.5rem;
+		line-height: 1.5rem !important;
 	}
 
 	.btn-base {
@@ -140,7 +159,7 @@
 		padding-left: 1.25rem !important;
 		padding-right: 1.25rem !important;
 		font-size: 1rem !important;
-		line-height: 1.5rem;
+		line-height: 1.5rem !important;
 	}
 
 	.btn-sm {
@@ -148,7 +167,7 @@
 		padding-left: 0.75rem !important;
 		padding-right: 0.75rem !important;
 		font-size: 0.75rem !important;
-		line-height: 1rem;
+		line-height: 1rem !important;
 	}
 
 	.btn-xs {
@@ -191,6 +210,27 @@
 
 	.btn-success:hover {
 		background-color: #22c55e;
+	}
+
+	.btn-blue {
+		background-color: rgb(14 165 233);
+		color: #fff;
+	}
+
+	.btn-black {
+		background-color: #000;
+		color: #fff;
+	}
+
+	.btn-teal {
+		background-color: rgb(20 184 166);
+		color: #fff;
+	}
+
+	.btn-trans-white {
+		background-color: transparent;
+		border: 2px solid #fff;
+		color: #fff;
 	}
 
 	@keyframes spinButton {

@@ -52,7 +52,6 @@
 			class:btn-xs={size == 'xs' && !unstyled}
 			class:btn-teal={color == 'teal' && !unstyled}
 			class:btn-black={color == 'black' && !unstyled}
-			class:btn-teal-alt={color == 'teal-alt' && !unstyled}
 			class={classes}
 			{...buttonProps}
 			{target}
@@ -80,7 +79,6 @@
 			class:btn-xs={size == 'xs' && !unstyled}
 			class:btn-teal={color == 'teal' && !unstyled}
 			class:btn-black={color == 'black' && !unstyled}
-			class:btn-teal-alt={color == 'teal-alt' && !unstyled}
 			class={classes}
 			{...buttonProps}
 		>
@@ -256,13 +254,13 @@
 		color: #fff;
 	}
 
-	.btn-teal-alt {
+	<<<<<<< HEAD .btn-teal-alt {
 		background-color: transparent;
 		border: 2px solid rgb(20 184 166);
 		color: rgb(20 184 166);
 	}
 
-	.btn-trans-white {
+	=======>>>>>>>121875c9ff511d09cf9bd7a8104406486477a400 .btn-trans-white {
 		background-color: transparent;
 		border: 2px solid #fff;
 		color: #fff;

@@ -254,18 +254,6 @@
 		color: #fff;
 	}
 
-	<<<<<<< HEAD .btn-teal-alt {
-		background-color: transparent;
-		border: 2px solid rgb(20 184 166);
-		color: rgb(20 184 166);
-	}
-
-	=======>>>>>>>121875c9ff511d09cf9bd7a8104406486477a400 .btn-trans-white {
-		background-color: transparent;
-		border: 2px solid #fff;
-		color: #fff;
-	}
-
 	@keyframes spinButton {
 		from {
 			transform: rotateY(180deg);

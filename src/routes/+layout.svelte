@@ -10,6 +10,7 @@
 		<a href="/hyperlinks">HYPERLINKS</a>
 		<a href="/buttons">BUTTONS</a>
 		<a href="/forms">FORMS</a>
+		<a href="/tables">TABLES</a>
 	</nav>
 	<main class="box min-h-screen font-normal text-neutral-700 pl-[6%] pr-[14%]">
 		<slot />

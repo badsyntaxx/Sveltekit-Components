@@ -18,6 +18,12 @@
 			role: 'Dark Knight',
 			email: 'batman@cave.com',
 			status: 'Offline'
+		},
+		{
+			name: 'Luke Skywalker',
+			role: 'Jedi Knight',
+			email: 'luke@degoba.com',
+			status: 'Online'
 		}
 	];
 </script>

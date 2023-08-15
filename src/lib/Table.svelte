@@ -2,30 +2,20 @@
 	export let data;
 
 	let windowWidth;
-
 	const handleResize = () => {
 		windowWidth = window.innerWidth;
-
-		if (windowWidth <= 1000) {
-			let th = [];
-			let num = 1;
-			const rows = document.querySelectorAll('tr');
-			document.querySelectorAll('th').forEach((element) => th.push(element.innerText));
-			rows.forEach((element) => {
-				const rowData = element.querySelectorAll('td');
-				rowData.forEach((td) => {
-					const span = td.querySelector('span');
-					if (span) {
-						span.innerHTML = th[num];
-
-						num++;
-					}
-				});
-				num = 1;
-			});
+		if (windowWidth <= 667) {
+			const rowData = [...document.querySelectorAll('td')];
+			for (const key in rowData) {
+				const span = rowData[key].querySelector('span');
+				if (span) span.style.display = 'block';
+			}
 		} else {
-			const labels = document.querySelectorAll('span');
-			if (labels.length) labels.forEach((l) => (l.innerHTML = ''));
+			const mobileLabels = [...document.querySelectorAll('span')];
+			for (const key in mobileLabels) {
+				const span = mobileLabels[key];
+				if (span) span.style.display = 'none';
+			}
 		}
 	};
 </script>
@@ -43,18 +33,17 @@
 	</tr>
 	{#each data as d, k}
 		<tr>
-			<td class="number-col"><span />{k}</td>
-			<td class="check-cell"><input type="checkbox" id="check-all" /></td>
-			<td><span /> {d.name}</td>
-			<td><span /> {d.email}</td>
-			<td><span /> {d.status}</td>
-			<td><span /> {d.role}</td>
+			<td class="number-col"><span style="display: none;" />{k + 1}</td>
+			<td class="check-cell"><input type="checkbox" /></td>
+			<td><span style="display: none;">{Object.getOwnPropertyNames(d)[0]}:</span> {d.name}</td>
+			<td><span style="display: none;">Email:</span> {d.email}</td>
+			<td><span style="display: none;">Status:</span> {d.status}</td>
+			<td><span style="display: none;">Role:</span> {d.role}</td>
 		</tr>
 	{/each}
 </table>
 
 <style>
-	/* Tables */
 	table {
 		table-layout: fixed;
 		width: 100%;
@@ -65,7 +54,7 @@
 	}
 
 	table input {
-		height: auto;
+		vertical-align: middle;
 	}
 
 	th {
@@ -81,13 +70,8 @@
 		color: #999;
 	}
 
-	tr {
-		position: relative;
-	}
-
 	tr:hover {
-		background-color: red;
-		cursor: pointer;
+		background-color: #eee;
 	}
 
 	tr:first-child {
@@ -100,12 +84,12 @@
 		padding: 5px 15px;
 		border: none;
 		overflow: hidden;
-		background-color: #fff;
 		background-clip: padding-box;
 	}
 
 	td span {
 		float: left;
+		text-transform: capitalize;
 	}
 
 	tr:focus,
@@ -115,14 +99,6 @@
 			inset 0px -11px 3px -10px rgba(0, 0, 0, 0.1);
 	}
 
-	.id-col {
-		max-width: 0;
-		width: 0;
-		overflow: hidden;
-		display: none !important;
-	}
-
-	.check-col,
 	.number-col,
 	.check-cell {
 		min-width: 44px;
@@ -143,7 +119,7 @@
 		line-height: 30px;
 	}
 
-	@media only screen and (max-width: 1000px) {
+	@media only screen and (max-width: 667px) {
 		table,
 		th,
 		td,

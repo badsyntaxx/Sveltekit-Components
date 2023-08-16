@@ -1,5 +1,38 @@
 <script>
+	import { onMount } from 'svelte';
+
 	export let data;
+	export let titles;
+
+	let allChecked = false;
+	let items = [];
+
+	onMount(() => {
+		for (const key in data) {
+			data[key].checked = false;
+		}
+	});
+
+	/* async function orderBy(param, settings, refreshTable) {
+		settings.orderBy = param;
+		if (settings.direction == 'asc') settings.direction = 'desc';
+		else settings.direction = 'asc';
+		await refreshTable();
+	} */
+
+	function toggleAll(e) {
+		for (const key in data) {
+			if (allChecked) {
+				data[key].checked = true;
+			} else {
+				data[key].checked = false;
+			}
+		}
+	}
+
+	function toggleOne() {
+		allChecked = false;
+	}
 
 	let windowWidth;
 	const handleResize = () => {
@@ -18,6 +51,17 @@
 			}
 		}
 	};
+
+	let specificData = [];
+	function processData() {
+		for (const key in data) {
+			console.log('🚀 ~ file: Table.svelte:60 ~ processData ~ data[key].:', data[key].checked);
+			if (data[key].checked) {
+				specificData.push(data[key]);
+			}
+		}
+		console.log('🚀 ~ file: Table.svelte:61 ~ processData ~ specificData:', specificData);
+	}
 </script>
 
 <svelte:window on:resize={handleResize} />
@@ -25,23 +69,33 @@
 <table>
 	<tr>
 		<th class="number-col">#</th>
-		<th class="check-cell"><input type="checkbox" id="check-all" /></th>
-		<th class="btn-sort">Name</th>
-		<th class="btn-sort">Email</th>
-		<th class="btn-sort">Status</th>
-		<th class="btn-sort">Role</th>
+		<th class="check-cell">
+			<input type="checkbox" bind:checked={allChecked} on:change={toggleAll} />
+		</th>
+		{#each titles as t}
+			<th class="btn-sort">{t}</th>
+		{/each}
 	</tr>
 	{#each data as d, k}
 		<tr>
 			<td class="number-col"><span style="display: none;" />{k + 1}</td>
-			<td class="check-cell"><input type="checkbox" /></td>
-			<td><span style="display: none;">{Object.getOwnPropertyNames(d)[0]}:</span> {d.name}</td>
-			<td><span style="display: none;">Email:</span> {d.email}</td>
-			<td><span style="display: none;">Status:</span> {d.status}</td>
-			<td><span style="display: none;">Role:</span> {d.role}</td>
+			<td class="check-cell">
+				<input
+					type="checkbox"
+					bind:checked={d.checked}
+					on:change={toggleOne}
+					name={`item-${k}`}
+					value={k}
+				/>
+			</td>
+			<td><span style="display: none;">{titles[0]}:</span> {d.name}</td>
+			<td><span style="display: none;">{titles[1]}:</span> {d.email}</td>
+			<td><span style="display: none;">{titles[2]}:</span> {d.status}</td>
+			<td><span style="display: none;">{titles[3]}:</span> {d.role}</td>
 		</tr>
 	{/each}
 </table>
+<button on:click={processData}>log</button>
 
 <style>
 	table {

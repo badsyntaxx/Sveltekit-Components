@@ -28,10 +28,20 @@
 			role: 'Jedi Knight',
 			email: 'luke@degoba.com',
 			status: 'Online'
+		},
+		{
+			id: 5,
+			name: 'Ab Lincoln',
+			role: 'President',
+			email: 'ZePres@whitehouse.com',
+			status: 'Offline'
 		}
 	];
 
 	const titles = ['Name', 'Email', 'Status', 'Role'];
+
+	let ids = [];
 </script>
 
-<Table {data} {titles} />
+<button on:click={() => console.log(ids)}>log</button>
+<Table {data} bind:ids {titles} />

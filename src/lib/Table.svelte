@@ -3,9 +3,10 @@
 
 	export let data;
 	export let titles;
+	export let ids;
 
 	let allChecked = false;
-	let items = [];
+	let sortDirection = 'desc';
 
 	onMount(() => {
 		for (const key in data) {
@@ -13,12 +14,22 @@
 		}
 	});
 
-	/* async function orderBy(param, settings, refreshTable) {
-		settings.orderBy = param;
-		if (settings.direction == 'asc') settings.direction = 'desc';
-		else settings.direction = 'asc';
-		await refreshTable();
-	} */
+	function sortRows(sortBy) {
+		const sorter = sortBy.toLowerCase();
+		data.sort((a, b) => {
+			if (sortDirection === 'desc') {
+				return b[sorter].localeCompare(a[sorter]);
+			} else {
+				return a[sorter].localeCompare(b[sorter]);
+			}
+		});
+
+		sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+
+		// Since SvelteKit's reactivity system might not detect changes to array elements,
+		// it's a good practice to create a new array reference to trigger updates.
+		data = [...data];
+	}
 
 	function toggleAll(e) {
 		for (const key in data) {
@@ -28,10 +39,21 @@
 				data[key].checked = false;
 			}
 		}
+		setCheckedIds();
 	}
 
 	function toggleOne() {
 		allChecked = false;
+		setCheckedIds();
+	}
+
+	function setCheckedIds() {
+		ids = [];
+		for (const key in data) {
+			if (data[key].checked) {
+				ids.push(data[key].id);
+			}
+		}
 	}
 
 	let windowWidth;
@@ -51,17 +73,6 @@
 			}
 		}
 	};
-
-	let specificData = [];
-	function processData() {
-		for (const key in data) {
-			console.log('🚀 ~ file: Table.svelte:60 ~ processData ~ data[key].:', data[key].checked);
-			if (data[key].checked) {
-				specificData.push(data[key]);
-			}
-		}
-		console.log('🚀 ~ file: Table.svelte:61 ~ processData ~ specificData:', specificData);
-	}
 </script>
 
 <svelte:window on:resize={handleResize} />
@@ -73,7 +84,7 @@
 			<input type="checkbox" bind:checked={allChecked} on:change={toggleAll} />
 		</th>
 		{#each titles as t}
-			<th class="btn-sort">{t}</th>
+			<th class="btn-sort" on:click={() => sortRows(t)}>{t}</th>
 		{/each}
 	</tr>
 	{#each data as d, k}
@@ -85,17 +96,16 @@
 					bind:checked={d.checked}
 					on:change={toggleOne}
 					name={`item-${k}`}
-					value={k}
+					value={d.id}
 				/>
 			</td>
-			<td><span style="display: none;">{titles[0]}:</span> {d.name}</td>
+			<td><span style="display: none;">{titles[0]}:</span> {d.name}({d.id})</td>
 			<td><span style="display: none;">{titles[1]}:</span> {d.email}</td>
 			<td><span style="display: none;">{titles[2]}:</span> {d.status}</td>
 			<td><span style="display: none;">{titles[3]}:</span> {d.role}</td>
 		</tr>
 	{/each}
 </table>
-<button on:click={processData}>log</button>
 
 <style>
 	table {

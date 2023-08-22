@@ -1,42 +1,81 @@
 <script>
 	import { onMount } from 'svelte';
 
-	export let data;
-	export let titles;
+	export let tableData;
 	export let ids;
+	export let options;
 
 	let allChecked = false;
-	let sortDirection = 'desc';
+	let titles = [];
 
 	onMount(() => {
-		for (const key in data) {
-			data[key].checked = false;
+		for (const key in tableData) {
+			tableData[key].checked = false;
 		}
+		sortRows();
 	});
 
-	function sortRows(sortBy) {
-		const sorter = sortBy.toLowerCase();
-		data.sort((a, b) => {
-			if (sortDirection === 'desc') {
-				return b[sorter].localeCompare(a[sorter]);
+	async function makeTitlesArray() {
+		for (const key in tableData) {
+			for (const k in tableData[key]) {
+				if (!titles.includes(k) && k != 'checked' && k != 'id') {
+					titles.push(k);
+				}
+			}
+		}
+		return titles;
+	}
+
+	function sortRows(sortBy = '') {
+		let sorter = sortBy;
+
+		if (sortBy) {
+			sorter = sortBy;
+			options.sortBy = sortBy;
+		} else if (options.sortBy) {
+			sorter = options.sortBy;
+		}
+
+		sorter = sorter.toLowerCase();
+
+		tableData.sort((a, b) => {
+			const valueA = a[sorter];
+			const valueB = b[sorter];
+
+			if (typeof valueA === 'number' && typeof valueB === 'number') {
+				// Both values are numbers
+				if (options.direction === 'desc') {
+					return valueB - valueA; // Descending numeric sort
+				} else {
+					return valueA - valueB; // Ascending numeric sort
+				}
 			} else {
-				return a[sorter].localeCompare(b[sorter]);
+				// At least one value is a string
+				if (options.direction === 'desc') {
+					return String(valueB).localeCompare(String(valueA)); // Descending string sort
+				} else {
+					return String(valueA).localeCompare(String(valueB)); // Ascending string sort
+				}
 			}
 		});
 
-		sortDirection = sortDirection === 'desc' ? 'asc' : 'desc';
+		options.direction = options.direction === 'desc' ? 'asc' : 'desc';
+
+		if (options.limit) {
+			tableData = tableData.slice(0, options.limit);
+		}
 
 		// Since SvelteKit's reactivity system might not detect changes to array elements,
 		// it's a good practice to create a new array reference to trigger updates.
-		data = [...data];
+		tableData = [...tableData];
 	}
 
-	function toggleAll(e) {
-		for (const key in data) {
+	function toggleAll() {
+		for (const key in tableData) {
 			if (allChecked) {
-				data[key].checked = true;
+				tableData[key].checked = true;
 			} else {
-				data[key].checked = false;
+				tableData[key].checked = false;
 			}
 		}
 		setCheckedIds();
@@ -49,9 +88,9 @@
 
 	function setCheckedIds() {
 		ids = [];
-		for (const key in data) {
-			if (data[key].checked) {
-				ids.push(data[key].id);
+		for (const key in tableData) {
+			if (tableData[key].checked) {
+				ids.push(tableData[key].id);
 			}
 		}
 	}
@@ -79,30 +118,32 @@
 
 <table>
 	<tr>
-		<th class="number-col">#</th>
 		<th class="check-cell">
 			<input type="checkbox" bind:checked={allChecked} on:change={toggleAll} />
 		</th>
-		{#each titles as t}
-			<th class="btn-sort" on:click={() => sortRows(t)}>{t}</th>
-		{/each}
+		{#await makeTitlesArray() then titles}
+			{#each titles as t}
+				<th class="btn-sort" on:click={() => sortRows(t)}>{t}</th>
+			{/each}
+		{/await}
 	</tr>
-	{#each data as d, k}
-		<tr>
-			<td class="number-col"><span style="display: none;" />{k + 1}</td>
-			<td class="check-cell">
-				<input
-					type="checkbox"
-					bind:checked={d.checked}
-					on:change={toggleOne}
-					name={`item-${k}`}
-					value={d.id}
-				/>
-			</td>
-			<td><span style="display: none;">{titles[0]}:</span> {d.name}({d.id})</td>
-			<td><span style="display: none;">{titles[1]}:</span> {d.email}</td>
-			<td><span style="display: none;">{titles[2]}:</span> {d.status}</td>
-			<td><span style="display: none;">{titles[3]}:</span> {d.role}</td>
+	{#each tableData as d, k}
+		<tr tabindex={k}>
+			{#each Object.entries(d) as td}
+				{#if td[0] == 'id'}
+					<td class="check-cell">
+						<input
+							type="checkbox"
+							bind:checked={d.checked}
+							on:change={toggleOne}
+							name={`item-${k}`}
+							value={d.id}
+						/>
+					</td>
+				{:else if td[0] != 'checked'}
+					<td><span style="display: none;">{td[0]}:</span> {td[1]}({d.id})</td>
+				{/if}
+			{/each}
 		</tr>
 	{/each}
 </table>
@@ -117,10 +158,6 @@
 		font-weight: 600;
 	}
 
-	table input {
-		vertical-align: middle;
-	}
-
 	th {
 		border-top: 1px solid rgba(0, 0, 0, 0.2);
 		border-bottom: 1px solid rgba(0, 0, 0, 0.2);
@@ -132,14 +169,18 @@
 		line-height: 44px;
 		font-weight: 600;
 		color: #999;
+		text-transform: capitalize;
 	}
 
 	tr:hover {
 		background-color: #eee;
 	}
 
-	tr:first-child {
-		border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	tr:focus,
+	tr:active {
+		background-color: #eee;
+		box-shadow: inset 0px 12px 3px -10px rgba(0, 0, 0, 0.1),
+			inset 0px -11px 3px -10px rgba(0, 0, 0, 0.1);
 	}
 
 	td {
@@ -156,14 +197,6 @@
 		text-transform: capitalize;
 	}
 
-	tr:focus,
-	tr:active {
-		background-color: #f7f7f7;
-		box-shadow: inset 0px 12px 3px -10px rgba(0, 0, 0, 0.1),
-			inset 0px -11px 3px -10px rgba(0, 0, 0, 0.1);
-	}
-
-	.number-col,
 	.check-cell {
 		min-width: 44px;
 		width: 44px;
@@ -171,16 +204,8 @@
 		padding: 0;
 	}
 
-	.check-cell {
-		width: 30px;
-		padding: 0 0 0 12px;
-	}
-
 	.check-cell input {
-		width: 13px !important;
-		margin: 0 !important;
-		height: 30px;
-		line-height: 30px;
+		vertical-align: middle;
 	}
 
 	@media only screen and (max-width: 667px) {
@@ -205,12 +230,10 @@
 			width: 100%;
 			text-align: right;
 		}
-		th.btn-sort,
-		th.number-col {
+		th.btn-sort {
 			display: none;
 		}
-		.check-cell,
-		.number-col {
+		.check-cell {
 			text-align: left;
 			padding: 5px 15px;
 			font-weight: bold;

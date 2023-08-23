@@ -141,7 +141,7 @@
 						/>
 					</td>
 				{:else if td[0] != 'checked'}
-					<td><span style="display: none;">{td[0]}:</span> {td[1]}({d.id})</td>
+					<td><span style="display: none;">{td[0]}:</span>{td[1]}</td>
 				{/if}
 			{/each}
 		</tr>

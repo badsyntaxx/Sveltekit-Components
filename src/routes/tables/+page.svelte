@@ -2,65 +2,18 @@
 	import Table from '$lib/Table.svelte';
 	import Button from '$lib/Button.svelte';
 
-	let tableData = [
-		{
-			id: 1,
-			name: 'Bilbo Baggins',
-			role: 'Hobbit',
-			gender: 'Male',
-			email: 'bilbo@shire.com',
-			status: 'Online'
-		},
-		{
-			id: 7,
-			name: 'Barbara Gorden',
-			role: 'Batgirl',
-			gender: 'Female',
-			email: 'babs@gotham.com',
-			status: 'Online'
-		},
-		{
-			id: 2,
-			name: 'Gandalf',
-			role: 'Wizard',
-			gender: 'Male',
-			email: 'gandalf@valinor.com',
-			status: 'Online'
-		},
-		{
-			id: 3,
-			name: 'Batman',
-			role: 'Dark Knight',
-			gender: 'Male',
-			email: 'batman@cave.com',
-			status: 'Offline'
-		},
-		{
-			id: 4,
-			name: 'Luke Skywalker',
-			role: 'Jedi Knight',
-			gender: 'Male',
-			email: 'luke@degoba.com',
-			status: 'Online'
-		},
-		{
-			id: 5,
-			name: 'Ab Lincoln',
-			role: 'President',
-			gender: 'Male',
-			email: 'ZePres@whitehouse.com',
-			status: 'Offline'
-		},
-		{
-			id: 6,
-			name: 'Galadriel',
-			role: 'Lady',
-			gender: 'Female',
-			email: 'gal@lothlorien.com',
-			status: 'Offline'
-		}
-	];
+	export let data;
+
 	let ids = [];
+	let tableData = data.data.map((user) => {
+		return {
+			id: user.id,
+			name: user.username,
+			email: user.email,
+			gender: user.gender,
+			address: `${user.address.address} ${user.address.city}, ${user.address.state}`
+		};
+	});
 	let options = {
 		limit: 10,
 		skip: 0,
